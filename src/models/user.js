@@ -40,22 +40,18 @@ const userSchema = new mongoose.Schema({
         }
     },
     nativeLanguages: [{
-        language: {
             type: String, 
             trim: true,
             lowercase: true,
             required: true,
-            defaut: 'english',
+            default: 'english',
             validate(value) {
                 if (!isLang(value)) {
                     throw new Error('Language not recognized')
                 }
             }
-        }
     }],
     otherLanguages: [{
-        language:
-        {
             type: String,
             trim: true,
             lowercase: true,
@@ -64,7 +60,6 @@ const userSchema = new mongoose.Schema({
                     throw new Error('Language not recognized')
                 }
             }
-        }
     }]
 }, {
     timestamps: true
