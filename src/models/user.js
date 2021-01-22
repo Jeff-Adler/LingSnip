@@ -1,5 +1,6 @@
 const mongoose = require('mongoose')
 const { default: validator } = require('validator')
+const isLang = require('./validators')
 
 const userSchema = new mongoose.Schema({
     name: {
@@ -44,7 +45,12 @@ const userSchema = new mongoose.Schema({
             trim: true,
             lowercase: true,
             required: true,
-            defaut: 'english'
+            defaut: 'english',
+            validate(value) {
+                if (!isLang(value)) {
+                    throw new Error('Language not recognized')
+                }
+            }
         }
     }],
     otherLanguages: [{
@@ -53,6 +59,11 @@ const userSchema = new mongoose.Schema({
             type: String,
             trim: true,
             lowercase: true,
+            validate(value) {
+                if (!isLang(value)) {
+                    throw new Error('Language not recognized')
+                }
+            }
         }
     }]
 }, {
