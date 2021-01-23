@@ -8,6 +8,6 @@ const app = express()
 //built-in express middleware to parse requests as JSON
 app.use(express.json())
 app.use(userRouter)
-// app.use(snippetRouter) 
+app.use(snippetRouter) 
 
 module.exports = app
