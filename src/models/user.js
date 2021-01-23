@@ -43,8 +43,6 @@ const userSchema = new mongoose.Schema({
             type: String, 
             trim: true,
             lowercase: true,
-            required: true,
-            default: 'english',
             validate(value) {
                 if (!isLang(value)) {
                     throw new Error('Language not recognized')
