@@ -5,7 +5,7 @@ const router = new express.Router()
 
 router.post('/snippets', auth, async (req, res) => {
     const snippet = new Snippet({
-        ...req.body, 
+        ...req.body,
         owner: req.user._id
     })
 
@@ -18,19 +18,18 @@ router.post('/snippets', auth, async (req, res) => {
 })
 
 // GET /tasks?limit=(10)&skip=(0)
-// GET /tasks?sortBy=createdAt:(asc/desc)
+// GET /tasks?sortBy=(createdAt):(asc/desc)
 router.get('/snippets', auth, async (req, res) => {
     // sort parameter
     const sort = {}
-    
+
     if (req.query.sortBy) {
         const parts = req.query.sortBy.split(':')
-        // parts[0] = field to sort by
-        // parts[1] = asc/desc
+        // parts[0] = field to sort by, parts[1] = asc/desc
         // sets sort value to -1 if query parameter is set to desc, 1 if asc/anything else
         sort[parts[0]] = (parts[1] === 'desc' ? -1 : 1)
     }
-    
+
     try {
         await req.user.populate({
             // path specifies field on User for which we want to get data
@@ -54,7 +53,10 @@ router.get('/snippets/:id', auth, async (req, res) => {
     const _id = req.params.id
 
     try {
-        const snippet = await Snippet.findOne({ _id, owner: req.user._id })
+        const snippet = await Snippet.findOne({
+            _id,
+            owner: req.user._id
+        })
 
         if (!snippet) {
             return res.status(404).send()
@@ -72,11 +74,16 @@ router.patch('/snippets/:id', auth, async (req, res) => {
     const isValidOperation = updates.every((update) => allowedUpdates.includes(update))
 
     if (!isValidOperation) {
-        return res.status(400).send({ error: 'Invalid updates!' })
+        return res.status(400).send({
+            error: 'Invalid updates!'
+        })
     }
 
     try {
-        const snippet = await Snippet.findOne({_id: req.params.id, owner: req.user._id})
+        const snippet = await Snippet.findOne({
+            _id: req.params.id,
+            owner: req.user._id
+        })
 
         if (!snippet) {
             return res.status(404).send()
@@ -92,7 +99,10 @@ router.patch('/snippets/:id', auth, async (req, res) => {
 
 router.delete('/snippets/:id', auth, async (req, res) => {
     try {
-        const snippet = await Snippet.findOneAndDelete({_id: req.params.id, owner: req.user._id})
+        const snippet = await Snippet.findOneAndDelete({
+            _id: req.params.id,
+            owner: req.user._id
+        })
 
         if (!snippet) {
             res.status(404).send()
